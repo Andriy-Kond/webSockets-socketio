@@ -17,6 +17,13 @@ const ioWebSocketServer = new Server(httpServer, {
 // Так само, як і у ws-пакеті підключаємо слухача:
 ioWebSocketServer.on('connection', socket => {
   console.log('New frontend connected');
+
+  // Ловлю повідомлення від фронтенду
+  socket.on('chat-message', message => {
+    // broadcast відправляє повідомлення всім, крім себе:
+    socket.broadcast.emit('chat-message', message);
+    // Тепер щоби фронтенд зловив цю розсилку в ньому тре повісити слухач подій
+  });
 });
 
 // Але через те, що використовуємо http-сервер, то треба його запустити:
